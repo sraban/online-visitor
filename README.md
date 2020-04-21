@@ -12,3 +12,5 @@ In Laravel 6,7
 4. php artisan migrate
 
 5. http://localhost/input/console
+
+![Console Screen](https://imagesk.github.io/1/employe-console.png)
