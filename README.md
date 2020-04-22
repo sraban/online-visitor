@@ -1,16 +1,41 @@
-# online-visitor
+## online-visitor
+
+#In Laravel 5, 6, 7 
 
 
-In Laravel 6,7 
+Install via composer
+```bash
+composer require sraban/online-visitor
+```
 
-1. composer require sraban/online-visitor
+set the database configuration in laravel project & migrate using  cli
+```bash
+php artisan migrate
+```
 
-2. php artisan vendor:publish --tag=Sraban\OnlineVisitor\OnlineVisitorServiceProvider
+Go to `http://myapp/input/console`
 
-3. set the database configuration in laravel project
+Web Console Looks like this:
 
-4. php artisan migrate
+![Web Console Screen](https://imagesk.github.io/1/employe-console.png)
 
-5. http://localhost/input/console
 
-![Console Screen](https://imagesk.github.io/1/employe-console.png)
+In Ubuntu shell
+
+```sh
+php artisan ov
+```
+
+
+If command not availalbe in list or any problem, Add the namespace in Console/Kernel.php in Laravel
+
+```sh
+protected $commands = [
+        'Sraban\OnlineVisitor\Commands\OnlineVisitorCommand'
+    ];
+```
+
+Terrminal Looks like this:
+
+![Shell Screen](https://imagesk.github.io/1/employee-cli.png)
+

@@ -12,11 +12,16 @@
     "require": {},
     "autoload": {
         "classmap": [
-            "src/Http/Controllers",
-            "src/Models"
+            "src/database/seeds",
+            "src/database/factories"
         ],
         "psr-0": {
             "Sraban\\OnlineVisitor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Sraban\\OnlineVisitor\\Test\\": "tests/"
         }
     },
     "extra": {

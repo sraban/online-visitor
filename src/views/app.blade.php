@@ -6,7 +6,7 @@
 
 </head>
 <body>
-    <div class="fluid-container">
+    <div class="fluid-container" style="width:98%;margin:auto 1%;">
     	<div class="row">
     	<div class="col-md-12">
     		<br>
@@ -16,10 +16,14 @@
 	        <div class="col-md-5">
 	           <header><b>#Console</b></header>
 	        	<form mehod="post">
-<textarea cols="66" rows="20" placeholder="commands.." id="commands">
-#SET empwebhistory 192.168.10.10 ‘http://google.com’
-GET empwebhistory  192.168.10.10
-#UNSET empwebhistory  192.168.10.10
+<textarea cols="66" rows="15" placeholder="commands.." id="commands">
+SET empdata 1 ‘Jack Petter’ ‘192.168.10.10’
+GET empdata ‘192.168.10.10’
+#UNSET empdata ‘192.168.10.10’
+GET empdata ‘192.168.10.10’
+SET empwebhistory 192.168.10.10 ‘http://google.com’
+#GET empwebhistory  192.168.10.10
+UNSET empwebhistory  192.168.10.10
 GET empwebhistory 192.168.10.10
 END
 </textarea><br>

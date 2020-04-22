@@ -6,11 +6,13 @@ namespace Sraban\OnlineVisitor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Sraban\OnlineVisitor\Models\Employee;
 use Sraban\OnlineVisitor\Models\EmployeeWebHistory;
 
 class EmployeeController extends Controller
 {
+    public $separator = '!@#$%^&*';
     /**
      * Display a listing of the resource.
      *
@@ -21,20 +23,20 @@ class EmployeeController extends Controller
 
         //$this->storeEmp();
         //$this->storeEmpHistory();
-        $ip_address = '192.168.10.11';
+        //$ip_address = '192.168.10.11';
         //return $this->showEmp($ip_address);
         //return $this->showEmpHistory($ip_address);
-        
         //$this->destroyEmp($ip_address);
         //$this->destroyEmpHistory($ip_address);
         return view('online-visitor::app');
     }
 
-    function payLoad($separator) {
+    function payLoad($contentArr = []) {
 
-        //$content = $request->getContent();
-        $content = file_get_contents('php://input');
-        $contentArr = @explode(PHP_EOL, $content);
+        if(empty($contentArr)) {
+            $content = file_get_contents('php://input');
+            $contentArr = @explode(PHP_EOL, $content);
+        }
         
         $flag = true;
         $contentArr = array_filter($contentArr, function($element) use( &$flag ) {
@@ -55,7 +57,7 @@ class EmployeeController extends Controller
             $doubleQuote = preg_match_all('/\"(.*?)\"/', $element, $m);
             if(!empty($m) && count($m[0]) !== 0 && $doubleQuote > 0 ) {
                 foreach($m[0] as $string) {
-                    $replace = str_replace(' ',$separator, $string);
+                    $replace = str_replace(' ',$this->separator, $string);
                     $replace = str_replace('"','', $replace);
                     $element = str_replace($string, $replace, $element);
                 }
@@ -68,21 +70,22 @@ class EmployeeController extends Controller
             $singleQuote = preg_match_all("/\'(.*?)\'/", $element, $m);
             if(!empty($m) && count($m[0]) !== 0 && $singleQuote > 0) {
                 foreach($m[0] as $string) {
-                    $replace = str_replace(' ',$separator, $string);
+                    $replace = str_replace(' ',$this->separator, $string);
                     $replace = str_replace("'",'', $replace);
                     $element = str_replace($string, $replace, $element);
                 }
             }
         }
 
-        /* -For ‘- */
+        /* -For ‘’- */
         foreach($contentArr as $k => &$element)
         {
-            $backQuote = preg_match_all("/\‘(.*?)\‘/", $element, $m);
+            $backQuote = preg_match_all("/\‘(.*?)\’/", $element, $m);
             if(!empty($m) && count($m[0]) !== 0 && $backQuote > 0) {
                 foreach($m[0] as $string) {
-                    $replace = str_replace(' ',$separator, $string);
+                    $replace = str_replace(' ',$this->separator, $string);
                     $replace = str_replace('‘','', $replace);
+                    $replace = str_replace('’','', $replace);
                     $element = str_replace($string, $replace, $element);
                 }
             }
@@ -94,7 +97,7 @@ class EmployeeController extends Controller
             $backQuote = preg_match_all("/\`(.*?)\`/", $element, $m);
             if(!empty($m) && count($m[0]) !== 0 && $backQuote > 0) {
                 foreach($m[0] as $string) {
-                    $replace = str_replace(' ',$separator, $string);
+                    $replace = str_replace(' ',$this->separator, $string);
                     $replace = str_replace('`','', $replace);
                     $element = str_replace($string, $replace, $element);
                 }
@@ -122,11 +125,10 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update()
+    public function update(Array $inputArray = [])
     {
         $output = [];
-        $separator = '!@#$%^&*';
-        $contentArr = $this->payLoad($separator);
+        $contentArr = $this->payLoad( $inputArray );
         
         if($contentArr) {
             foreach($contentArr as $query) {
@@ -134,7 +136,7 @@ class EmployeeController extends Controller
                 
                 if($method == "get" ) {
                     list($m, $table, $ip_address) = @explode(" ", $query);
-                    $ip_address = str_replace($separator, ' ',$ip_address);
+                    $ip_address = str_replace($this->separator, ' ',$ip_address);
                     // query
                     if(strtolower($table) == 'empwebhistory'){
                         array_push($output, $this->showEmpHistory($ip_address));
@@ -148,7 +150,7 @@ class EmployeeController extends Controller
 
                 if($method == "uns" ) {
                     list($m, $table, $ip_address) = @explode(" ", $query);
-                    $ip_address = str_replace($separator, ' ',$ip_address);
+                    $ip_address = str_replace($this->separator, ' ',$ip_address);
                     // query
                     if(strtolower($table) == 'empwebhistory'){
                         array_push($output, $this->destroyEmpHistory($ip_address));
@@ -163,15 +165,15 @@ class EmployeeController extends Controller
 
                     $q = @explode(" ", $query);
                     if(strtolower($q[1]) == 'empwebhistory'){
-                        $ip_address = str_replace($separator, ' ', @$q[2]);
-                        $url = str_replace($separator, ' ', @$q[3]);
+                        $ip_address = str_replace($this->separator, ' ', @$q[2]);
+                        $url = str_replace($this->separator, ' ', @$q[3]);
                         $input = ['url'=>$url, 'ip_address' => $ip_address];
                         array_push($output, $this->storeEmpHistory($input));
                         Log::info('set - empwebhistory - ', $input);
                     } else if(strtolower($q[1]) == 'empdata') {
-                        $emp_id = str_replace($separator, ' ', @$q[2]);
-                        $emp_name = str_replace($separator, ' ', @$q[3]);
-                        $ip_address = str_replace($separator, ' ', @$q[4]);
+                        $emp_id = str_replace($this->separator, ' ', @$q[2]);
+                        $emp_name = str_replace($this->separator, ' ', @$q[3]);
+                        $ip_address = str_replace($this->separator, ' ', @$q[4]);
                         $input = ['emp_id' => $emp_id, 'emp_name' => $emp_name, 'ip_address' => $ip_address ];
                         array_push($output, $this->storeEmp($input));
                         Log::info('set - empdata - ', $input);
@@ -182,20 +184,7 @@ class EmployeeController extends Controller
 
         }
 
-
-        // For Writing Test Cases
-
-        //$this->storeEmp();
-        //$this->storeEmpHistory();
-
-        //$this->showEmp($ip_address);
-        //$this->showEmpHistory($ip_address);
-        
-        //$this->destroyEmp($ip_address);
-        //$this->destroyEmpHistory($ip_address);
-
         return $output;
-        exit;
     }
 
     /**
@@ -206,10 +195,19 @@ class EmployeeController extends Controller
      */
     public function storeEmp($input)
     {
-          // Duplicate IP validation
-          if(Employee::create($input)){
-            return 'Ok';
-          }
+        $validator = Validator::make($input, [
+            'emp_id' => 'required|unique:employees|max:255',
+            'emp_name' => 'required|max:255',
+            'ip_address' => 'required|unique:employees|max:45'
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
+
+        if(Employee::create($input)){
+            return 'Saved';
+        }
     }
 
     /**
@@ -220,9 +218,17 @@ class EmployeeController extends Controller
      */
     public function storeEmpHistory($input)
     {
-            // validate key should exits in parent table
+            $validator = Validator::make($input, [
+                'url' => 'required|max:255|unique:employee_web_histories,url,NULL,id,ip_address,' . $input['ip_address'],
+                'ip_address' => 'required|exists:employees,ip_address|max:45|unique:employee_web_histories,ip_address,NULL,id,url,' . $input['url']
+            ]);
+
+            if ($validator->fails()) {
+                return $validator->errors();
+            }
+
             if(EmployeeWebHistory::create($input)){
-                return 'Ok';
+                return 'Saved';
             }
     }
 
@@ -290,7 +296,7 @@ class EmployeeController extends Controller
         $emp = Employee::where('ip_address', $ip_address);
         if( $emp && $emp->count() ){
             if( $emp->delete() ) {
-                return;
+                return 'Deleted';
             }
         } else {
             return 'NULL';
@@ -308,10 +314,14 @@ class EmployeeController extends Controller
         $empHistory = EmployeeWebHistory::where('ip_address', $ip_address);
         if( $empHistory && $empHistory->count() ) {
             if( $empHistory->delete() ) {
-                return;
+                return 'Deleted';
             }
         } else {
             return 'NULL';
         }    
+    }
+
+    public function cli() {
+        return 'Sraban Kumar Pahadasingh';
     }
 }

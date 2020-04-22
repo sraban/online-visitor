@@ -52,6 +52,11 @@ class OnlineVisitorServiceProvider extends ServiceProvider {
     public function register()
     {
         $this->app->make('Sraban\OnlineVisitor\EmployeeController');
+        
+        $this->app->singleton('sraban.ov', function($app) {
+            return $app['Sraban\OnlineVisitor\Commands\OnlineVisitorCommand'];
+        });
+        $this->commands('sraban.ov');
     }
 
     /**
