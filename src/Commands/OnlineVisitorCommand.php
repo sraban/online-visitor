@@ -52,7 +52,7 @@ class OnlineVisitorCommand extends Command
 
         if(!empty($queries)){
             $controller = new EmployeeController();
-            $ouput = $controller->update($queries);
+            $ouput = $controller->statement($queries);
             $this->info( json_encode($ouput) );
         } else{
             $this->error('No Input');

@@ -125,11 +125,11 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Array $inputArray = [])
+    public function statement(Array $inputArray = [])
     {
         $output = [];
         $contentArr = $this->payLoad( $inputArray );
-        
+
         if($contentArr) {
             foreach($contentArr as $query) {
                 $method = strtolower(substr($query,0,3));
@@ -148,7 +148,7 @@ class EmployeeController extends Controller
 
                 }
 
-                if($method == "uns" ) {
+                if( strtolower(substr($query,0,5)) == "unset" ) {
                     list($m, $table, $ip_address) = @explode(" ", $query);
                     $ip_address = str_replace($this->separator, ' ',$ip_address);
                     // query
@@ -262,8 +262,7 @@ class EmployeeController extends Controller
     public function showEmpHistory($ip_address)
     {
         $eh = Employee::with('history')->where('ip_address',$ip_address)->first();
-        
-        if($eh && $eh->emp_id ) {
+        if($eh && $eh->emp_id && $eh->history->count() ) {
             
             $urls = array();
 
@@ -321,7 +320,8 @@ class EmployeeController extends Controller
         }    
     }
 
-    public function cli() {
-        return 'Sraban Kumar Pahadasingh';
+    public function refreshEmployee() {
+        $seed = new Employee();
+        $seed->clean();
     }
 }

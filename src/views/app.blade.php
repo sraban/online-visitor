@@ -5,7 +5,7 @@
     <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 </head>
-<body>
+<body style="background: #300B24;">
     <div class="fluid-container" style="width:98%;margin:auto 1%;">
     	<div class="row">
     	<div class="col-md-12">
@@ -14,7 +14,7 @@
     	</div>
     	<div class="row">
 	        <div class="col-md-5">
-	           <header><b>#Console</b></header>
+	           <header style="color: white;"><b>#Console</b></header>
 	        	<form mehod="post">
 <textarea cols="66" rows="15" placeholder="commands.." id="commands">
 SET empdata 1 ‘Jack Petter’ ‘192.168.10.10’
@@ -31,7 +31,7 @@ END
 	        	</form>
 	        </div>
 	        <div class="col-md-7">
-	        <header><b>#Output</b></header>
+	        <header style="color: white;"><b>#Output</b></header>
 	        <pre style="height:500px; overflow: scroll;">
 	        	<code>
 	        		<div id="output"></div>

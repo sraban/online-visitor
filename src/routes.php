@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace'=>'\Sraban\OnlineVisitor'], function() {
 
-	Route::get('/input/console', 'EmployeeController@index')->name('emp');
-	Route::post('/output/console', 'EmployeeController@update')->name('emp_edit');
+	Route::get('/input/console', 'EmployeeController@index')->name('web_console');
+	Route::post('/output/console', 'EmployeeController@statement')->name('statement');
 
 });
 

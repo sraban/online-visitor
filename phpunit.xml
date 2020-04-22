@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" bootstrap="./vendor/autoload.php" convertNoticesToExceptions="true" convertWarningsToExceptions="true" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false">
+<phpunit colors="true" 
+        bootstrap="./vendor/autoload.php" 
+        convertNoticesToExceptions="true" 
+        convertWarningsToExceptions="true" 
+        stopOnError="false" 
+        stopOnFailure="false" 
+        stopOnIncomplete="false" 
+        stopOnSkipped="false">
     <testsuites>
         <testsuite name="all">
             <directory suffix="Test.php">tests/</directory>
@@ -17,4 +24,15 @@
         <log type="coverage-text" target="build/coverage.txt"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="laravel_sraban"/>
+        <env name="API_DEBUG" value="false"/>
+        <env name="MAIL_DRIVER" value="log"/>
+        <ini name="memory_limit" value="512M" />
+    </php>
 </phpunit>
