@@ -20,14 +20,6 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-
-        //$this->storeEmp();
-        //$this->storeEmpHistory();
-        //$ip_address = '192.168.10.11';
-        //return $this->showEmp($ip_address);
-        //return $this->showEmpHistory($ip_address);
-        //$this->destroyEmp($ip_address);
-        //$this->destroyEmpHistory($ip_address);
         return view('online-visitor::app');
     }
 
